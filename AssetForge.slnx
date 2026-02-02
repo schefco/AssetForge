@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AssetForge.API/AssetForge.API.csproj" />
+  <Project Path="AssetForge.Application/AssetForge.Application.csproj" Id="cc65a5a1-2f87-4504-84cb-f7f71f35c9bc" />
+  <Project Path="AssetForge.Infrastructure/AssetForge.Infrastructure.csproj" />
+</Solution>
