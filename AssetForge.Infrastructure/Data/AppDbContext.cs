@@ -17,24 +17,6 @@ namespace AssetForge.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seeded Admin
-            var hash = Convert.FromBase64String("YSOBBRqoFppg1td9aQk1tMdwliwKLUlpEAaRsipq/qCYhOlF4S22q4lDXM/wvIx5H6RdFJ/9mmtuOBvEnC7bnQ==");
-            var salt = Convert.FromBase64String("HWozY+cC5UkMh1YgJ3uaqYFuBl1jgzzQrNKBs1tH0UDoGkqBjCO1k4vO/mERB98gbfkQDPw5Eu5+LBinrpyeSSmGKIW4gjwLuHuLKncwFuVvVEgUXljaMWvFrR1w8UnhOJ4wTLmxiTx+fR+vqzI0R+Wb1fJ0vXoIaWZcZicoKwM=");
-
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = 1,
-                FirstName = "Admin",
-                LastName = "User",
-                Email = "admin@assetforge.com",
-                Role = "Admin",
-                CreatedAt = new DateTime(2026, 10, 10),
-                PasswordHash = hash,
-                PasswordSalt = salt,
-                RefreshToken = "",
-                RefreshTokenExpiryTime = new DateTime(2025, 10, 10)
-            });
-
             //
             // User -> Assets (One to many)
             //
