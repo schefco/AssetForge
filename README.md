@@ -13,78 +13,78 @@ Features
 ---------------------------------------
 
 Authentication and Authorization
-• Secure JWT authentication
-• Refresh token rotation
-• Role‑based access control (Admin, Technician, User)
-• Protected API endpoints and protected frontend routes
+- Secure JWT authentication
+- Refresh token rotation
+- Role‑based access control (Admin, Technician, User)
+- Protected API endpoints and protected frontend routes
 
 Ticketing System
-• Create, view, and manage tickets
-• Slide‑over ticket detail panel
-• Julian‑date ticket numbering (Year + Julian Day + Sequence)
-• Example: TKT25029‑0001
-• Optional custom prefixes (up to 5 characters)
-• Technician assignment workflow
-• User‑specific ticket views
+- Create, view, and manage tickets
+- Slide‑over ticket detail panel
+- Julian‑date ticket numbering (Year + Julian Day + Sequence)
+- Example: TKT25029‑0001
+- Optional custom prefixes (up to 5 characters)
+- Technician assignment workflow
+- User‑specific ticket views
 
 Frontend (React + TypeScript)
-• Zustand global state management
-• Axios interceptors for token refresh
-• Responsive dashboard layout
-• Reusable components (modals, slide‑overs, tables)
-• Strong TypeScript models for all DTOs
+- Zustand global state management
+- Axios interceptors for token refresh
+- Responsive dashboard layout
+- Reusable components (modals, slide‑overs, tables)
+- Strong TypeScript models for all DTOs
 
 Backend (ASP.NET Core)
-• Clean architecture with Services, DTOs, and AutoMapper
-• Entity Framework Core with SQL Server
-• Query endpoints for pagination and filtering
-• Secure password hashing and refresh token storage
+- Clean architecture with Services, DTOs, and AutoMapper
+- Entity Framework Core with SQL Server
+- Query endpoints for pagination and filtering
+- Secure password hashing and refresh token storage
 
 --------------------------------------------
 Tech Stack
 --------------------------------------------
 
 Frontend
-• React 18
-• TypeScript
-• Zustand
-• Axios
-• TailwindCSS
-• Vite
+- React 18
+- TypeScript
+- Zustand
+- Axios
+- TailwindCSS
+- Vite
 
 Backend
-• .NET 10
-• ASP.NET Core Web API
-• Entity Framework Core
-• SQL Server or SQLite
-• AutoMapper
+- .NET 10
+- ASP.NET Core Web API
+- Entity Framework Core
+- SQL Server or SQLite
+- AutoMapper
 
 Project Structure
 
-AssetForge/
-AssetForge.API/
-AssetForge.Application/
-AssetForge.Infrastructure/
-assetforge-frontend/
-README.md
+-AssetForge/
+-  AssetForge.API/
+-  AssetForge.Application/
+-  AssetForge.Infrastructure/
+-  assetforge-frontend/
+-  README.md
 
 -----------------------------------------------
 Running the Project
 -----------------------------------------------
 
-##### Backend #####
+# Backend #
 
-cd AssetForge.API
-dotnet ef database update
-dotnet run
+- cd AssetForge.API
+- dotnet ef database update
+- dotnet run
 
-###### Frontend #####
+# Frontend #
 
-cd assetforge-frontend
-npm install
-npm run dev
+- cd assetforge-frontend
+- npm install
+- npm run dev
 
-##### Creating the First Admin User #####
+# Creating the First Admin User #
 
 AssetForge does not seed an admin account by default. When the system is first launched and the database contains no users, the frontend automatically redirects to a Create First Admin page.
 
@@ -103,8 +103,8 @@ Once created, you can log in using this account and begin managing users and tic
 -------------------------------------------------
 Future Enhancements
 -------------------------------------------------
-• Ticket comments and activity logs
-• Asset inventory module
-• Technician performance metrics
-• Email notifications
-• Dark mode
+- Ticket comments and activity logs
+- Asset inventory module
+- Technician performance metrics
+- Email notifications
+- Dark mode
