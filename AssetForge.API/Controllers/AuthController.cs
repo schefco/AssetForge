@@ -25,15 +25,29 @@ namespace AssetForge.API.Controllers
             _config = config;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserCreateDTO dto)
         {
-            // Only Admins can assign roles to other Users
-            var requesterRole = User.FindFirstValue(ClaimTypes.Role);
+            // Check if this is the first user
+            var isFirstUser = !await _context.Users.AnyAsync();
 
-            if (dto.Role != "User" && requesterRole != "Admin")
-                return Forbid("Only Admins can create Admin or Technician accounts");
+            if (!isFirstUser)
+            {
+                // After the first user exists, only Admins can register new users
+                var requesterRole = User.FindFirstValue(ClaimTypes.Role);
+
+                if (requesterRole != "Admin")
+                    return Unauthorized("Only Admins can create new user accounts.");
+
+                // Only Admins can assign elevated roles
+                if (dto.Role != "User" && requesterRole != "Admin")
+                    return Unauthorized("Only Admins can create Admin or Technician accounts.");
+            }
+            else
+            {
+                // First user is always Admin
+                dto.Role = "Admin";
+            }
 
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest("Email already exists");
@@ -131,6 +145,13 @@ namespace AssetForge.API.Controllers
                 return Unauthorized();
 
             return Ok(user);
+        }
+
+        [HttpGet("has-users")]
+        public async Task<IActionResult> HasUsers()
+        {
+            var any = await _context.Users.AnyAsync();
+            return Ok(any);
         }
 
         [HttpPost("refresh")]

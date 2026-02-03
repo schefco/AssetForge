@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetForge.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260113222010_AddPasswordFields")]
-    partial class AddPasswordFields
+    [Migration("20260203180740_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,6 @@ namespace AssetForge.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AssignedTo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -48,11 +44,20 @@ namespace AssetForge.Infrastructure.Migrations
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Assets");
                 });
@@ -65,15 +70,20 @@ namespace AssetForge.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AssignedTo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("AssignedToId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prefix")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priority")
@@ -84,11 +94,19 @@ namespace AssetForge.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TicketNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedToId");
+
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("Tickets");
                 });
@@ -124,6 +142,13 @@ namespace AssetForge.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -131,6 +156,43 @@ namespace AssetForge.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AssetForge.Infrastructure.Entities.Asset", b =>
+                {
+                    b.HasOne("AssetForge.Infrastructure.Entities.User", "User")
+                        .WithMany("Assets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AssetForge.Infrastructure.Entities.Ticket", b =>
+                {
+                    b.HasOne("AssetForge.Infrastructure.Entities.User", "AssignedTo")
+                        .WithMany("AssignedTickets")
+                        .HasForeignKey("AssignedToId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AssetForge.Infrastructure.Entities.User", "CreatedBy")
+                        .WithMany("CreatedTickets")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AssignedTo");
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("AssetForge.Infrastructure.Entities.User", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("AssignedTickets");
+
+                    b.Navigation("CreatedTickets");
                 });
 #pragma warning restore 612, 618
         }
