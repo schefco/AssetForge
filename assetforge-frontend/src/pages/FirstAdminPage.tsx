@@ -12,6 +12,8 @@ export default function FirstAdminPage() {
 
     const [message, setMessage] = useState("");
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value});
     };
@@ -60,11 +62,19 @@ export default function FirstAdminPage() {
                 className="border p-2 w-full"
                 onChange={handleChange}/>
 
-                <input name="password"
-                type="password"
-                placeholder="Password"
-                className="border p-2 w-full"
-                onChange={handleChange}/>
+                <div className="relative">
+                    <input name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="border p-2 w-full"
+                    onChange={handleChange}/>
+
+                    <button type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-2 text-sm text-gray-600 hover:text-gray-800">
+                        {showPassword ? "Hide" : "Show"}
+                    </button>        
+                </div>
 
                 <button type="submit"
                 className="bg-blue-600 text-white w-full py-2 rounded">Create Admin</button>

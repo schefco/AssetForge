@@ -3,6 +3,7 @@ import api from "../api/axios";
 import CreateUser from "../components/CreateUser";
 import EditUser from "../components/EditUser";
 import type { User } from "../types/User";
+import ResetPasword from "../components/ResetPassword";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -17,11 +18,22 @@ export default function UsersPage() {
   // Edit user
   const [showEdit, setShowEdit] = useState(false);
 
+  // Reset user password
+  const [resetUser, setResetUser] = useState<User | null>(null);
+  const openResetPassword = (user: User) => setResetUser(user);
+  const closeResetPassword = () => setResetUser(null);
+
+  const fetchUsers = async () => {
+    const res = await api.get<User[]>("/users");
+    setUsers(res.data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    api.get("/users").then((res) => {
-      setUsers(res.data);
-      setLoading(false);
-    });
+    const load = async () => {
+      await fetchUsers();
+    };
+    load()
   }, []);
 
   return (
@@ -50,12 +62,12 @@ export default function UsersPage() {
               <th className="py-3 px-4">Name</th>
               <th className="py-3 px-4">Email</th>
               <th className="py-3 px-4">Role</th>
-              <th className="py-3 px-4 text-right">Action</th>
+              <th className="py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {users.map((user) => (
+            {users.map(user => (
               <tr key={user.id}
               className="border-b hover:bg-gray-50 transition">
                 <td className="py-3 px-4">{user.id}</td>
@@ -63,12 +75,17 @@ export default function UsersPage() {
                 <td className="py-3 px-4">{user.email}</td>
                 <td className="py-3 px-4">{user.role}</td>
 
-                <td className="py-3 px-4 text-right">
+                <td className="py-3 px-4 text-center">
                   <button className="text-blue-600 hover:underline mr-3"
                   onClick={() => {
                     setSelectedUser(user);
                     setShowEdit(true);
                   }}>Edit</button>
+
+                  <button className="text-orange-800 hover:underline mr-3"
+                  onClick={() => {
+                    openResetPassword(user)
+                  }}>Reset Password</button>
 
                   <button className="text-red-600 hover:underline"
                   onClick={async () => {
@@ -97,6 +114,12 @@ export default function UsersPage() {
         setSelectedUser(null);
       }}
       onUpdated={(updated: User) => setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)))}/>
+    )}
+
+    {resetUser && (
+      <ResetPasword user={resetUser}
+      onClose={closeResetPassword}
+      onSuccess={fetchUsers} />
     )}
     </>
   )

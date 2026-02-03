@@ -4,8 +4,10 @@ using AssetForge.Infrastructure.Data;
 using AssetForge.Infrastructure.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AssetForge.API.Controllers
 {
@@ -35,6 +37,15 @@ namespace AssetForge.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserUpdateDTO dto)
             => Ok(await _service.UpdateAsync(id, dto));
+
+        [HttpPut("{id}/reset-password")]
+        public async Task<IActionResult> ResetPassword(int id, ResetPasswordDTO dto)
+        {
+            var success = await _service.ResetPasswordAsync(id, dto.NewPassword);
+            if (!success) return NotFound("User not found");
+
+            return Ok("Password reset successfully");
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)

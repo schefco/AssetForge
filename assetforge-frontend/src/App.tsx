@@ -10,6 +10,7 @@ import UsersPage from "./pages/UsersPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout";
 import FirstAdminPage from "./pages/FirstAdminPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 export default function App() {
   const loadUser = useAuthStore((s) => s.loadUser);
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/assets" element={<AssetsPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
         </Route>
       </Route>
     </Routes>

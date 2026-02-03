@@ -1,4 +1,5 @@
 ﻿using AssetForge.Application.DTOs.Users;
+using AutoMapper;
 
 namespace AssetForge.Application.Interfaces.Users
 {
@@ -8,5 +9,6 @@ namespace AssetForge.Application.Interfaces.Users
         Task<UserResponseDTO?> GetByIdAsync(int id);
         Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto);
         Task<bool> DeleteAsync(int id);
+        Task<bool> ResetPasswordAsync(int id, string newPassword);
     }
 }

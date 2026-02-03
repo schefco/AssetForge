@@ -120,6 +120,29 @@ namespace AssetForge.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [HttpPut("update-password")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordDTO dto)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null) return NotFound("User not found");
+
+            // Validate current password
+            if (!PasswordHasher.VerifyPassword(dto.CurrentPassword, user.PasswordHash, user.PasswordSalt))
+                return BadRequest("Current password is incorrect");
+
+            // Update Password
+            PasswordHasher.CreatePasswordHash(dto.NewPassword, out var hash, out var salt);
+            user.PasswordHash = hash;
+            user.PasswordSalt = salt;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Password updated successfully");
+        }
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> Me()
