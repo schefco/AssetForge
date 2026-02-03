@@ -102,9 +102,9 @@ Once created, you can log in using this account and begin managing users and tic
 
 -------------------------------------------------
 Future Enhancements
+-------------------------------------------------
 • Ticket comments and activity logs
 • Asset inventory module
 • Technician performance metrics
 • Email notifications
 • Dark mode
--------------------------------------------------
