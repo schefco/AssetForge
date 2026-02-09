@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Diagnostics.Contracts;
 using AssetForge.Infrastructure.Services;
+using System.Security.Claims;
 
 namespace AssetForge.Application.Services.Users
 {
@@ -32,14 +33,21 @@ namespace AssetForge.Application.Services.Users
             return user == null ? null : _mapper.Map<UserResponseDTO>(user);
         }
 
-        public async Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto)
+        public async Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto, string requesterRole)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
                 throw new Exception("User not found");
 
             if (string.IsNullOrEmpty(user.NotificationEmail))
                 user.NotificationEmail = user.Email;
+
+            if (requesterRole == "Admin")
+            {
+                user.Email = dto.Email;
+                user.Role = dto.Role;
+            }
 
             user.FirstName = dto.FirstName ?? user.FirstName;
             user.LastName = dto.LastName ?? user.LastName;

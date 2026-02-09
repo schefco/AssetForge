@@ -7,7 +7,7 @@ namespace AssetForge.Application.Interfaces.Users
     {
         Task<List<UserResponseDTO>> GetAllAsync();
         Task<UserResponseDTO?> GetByIdAsync(int id);
-        Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto);
+        Task<UserResponseDTO> UpdateAsync(int id, UserUpdateDTO dto, string requesterRole);
         Task<bool> DeleteAsync(int id);
         Task<bool> ResetPasswordAsync(int id, string newPassword);
     }

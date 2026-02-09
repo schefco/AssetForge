@@ -36,7 +36,10 @@ namespace AssetForge.API.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserUpdateDTO dto)
-            => Ok(await _service.UpdateAsync(id, dto));
+        {
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            return Ok(await _service.UpdateAsync(id, dto, role));
+        }
 
         [HttpPut("{id}/reset-password")]
         public async Task<IActionResult> ResetPassword(int id, ResetPasswordDTO dto)
