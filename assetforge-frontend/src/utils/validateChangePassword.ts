@@ -1,0 +1,33 @@
+import type { PasswordErrors } from "../types/PasswordErrors";
+
+export function validateChangePassword(fields: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}) {
+    const errors: PasswordErrors = {
+        currentPassword: null,
+        newPassword: null,
+        confirmPassword: null,
+    };
+
+    if (!fields.currentPassword.trim()) {
+        errors.currentPassword = "Required";
+    }
+
+    if (!fields.newPassword.trim()) {
+        errors.newPassword = "Required";
+    }
+
+    if (!fields.confirmPassword.trim()) {
+        errors.confirmPassword = "Required";
+    }
+
+    if (fields.newPassword.trim() && fields.confirmPassword.trim() && fields.newPassword !== fields.confirmPassword) {
+        errors.confirmPassword = "Passwords do not match";
+    }
+
+    const isValid = Object.values(errors).every((e) => e === null);
+
+    return { errors, isValid };
+}

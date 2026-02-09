@@ -50,10 +50,10 @@ export default function MainLayout() {
                         </NavLink>
                     )}
 
-                    <NavLink to="/change-password" className={({ isActive }) => 
+                    <NavLink to="/account" className={({ isActive }) => 
                     `p-2 rounded ${isActive ? "bg-gray-700" : "hover:bg-gray-800"}`
                 }>
-                    Change Password
+                    Account
                 </NavLink>
                 </nav>
 

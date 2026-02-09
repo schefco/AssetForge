@@ -9,6 +9,7 @@ interface User {
   role: string;
   firstName: string;
   lastName: string;
+  notificationEmail: string;
 }
 
 interface AuthState {
@@ -18,6 +19,7 @@ interface AuthState {
   login: (token: string) => void;
   logout: () => void;
   loadUser: () => Promise<void>;
+  setUser: (u: User | null) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -37,6 +39,7 @@ login: (token: string) => {
         role: decoded.role,
         firstName: "",
         lastName: "",
+        notificationEmail: "",
       },
     });
 
@@ -71,6 +74,7 @@ login: (token: string) => {
           role: res.data.role,
           firstName: res.data.firstName,
           lastName: res.data.lastName,
+          notificationEmail: res.data.notificationEmail,
         },
         isInitialized: true,
       });
@@ -85,5 +89,9 @@ login: (token: string) => {
         isInitialized: true,
       });
     }
+  },
+
+  setUser: (u: User | null) => {
+    set({ user: u });
   },
 }));

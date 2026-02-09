@@ -4,6 +4,7 @@ import CreateUser from "../components/CreateUser";
 import EditUser from "../components/EditUser";
 import type { User } from "../types/User";
 import ResetPasword from "../components/ResetPassword";
+import toast from "react-hot-toast";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -73,7 +74,16 @@ export default function UsersPage() {
                 <td className="py-3 px-4">{user.id}</td>
                 <td className="py-3 px-4">{user.firstName} {user.lastName}</td>
                 <td className="py-3 px-4">{user.email}</td>
-                <td className="py-3 px-4">{user.role}</td>
+                <td className="py-3 px-4">
+                  <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                  user.role === "Admin"
+                  ? "bg-purple-100 text-purple-700"
+                  : user.role === "Technician"
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-gray-100 text-gray-700"}`}>
+                  {user.role}
+                  </span>
+                </td>
 
                 <td className="py-3 px-4 text-center">
                   <button className="text-blue-600 hover:underline mr-3"
@@ -89,8 +99,13 @@ export default function UsersPage() {
 
                   <button className="text-red-600 hover:underline"
                   onClick={async () => {
-                    await api.delete(`/users/${user.id}`);
-                    setUsers((prev) => prev.filter((u) => u.id !== user.id));
+                    try {
+                      await api.delete(`/users/${user.id}`);
+                      setUsers((prev) => prev.filter((u) => u.id !== user.id));
+                      toast.success("User deleted");
+                    } catch {
+                      toast.error("Failed to delete user");
+                    }
                   }}>Delete</button>
                 </td>
               </tr>
@@ -122,5 +137,5 @@ export default function UsersPage() {
       onSuccess={fetchUsers} />
     )}
     </>
-  )
+  );
 }

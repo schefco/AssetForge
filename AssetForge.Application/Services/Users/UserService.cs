@@ -38,7 +38,13 @@ namespace AssetForge.Application.Services.Users
             if (user == null)
                 throw new Exception("User not found");
 
-            _mapper.Map(dto, user);
+            if (string.IsNullOrEmpty(user.NotificationEmail))
+                user.NotificationEmail = user.Email;
+
+            user.FirstName = dto.FirstName ?? user.FirstName;
+            user.LastName = dto.LastName ?? user.LastName;
+            user.NotificationEmail = dto.NotificationEmail ?? user.NotificationEmail;
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserResponseDTO>(user);

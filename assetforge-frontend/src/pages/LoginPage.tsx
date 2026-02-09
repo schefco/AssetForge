@@ -4,6 +4,7 @@ import * as yup from "yup";
 import api from "../api/axios";
 import { useAuthStore } from "../context/authStore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -15,6 +16,7 @@ type LoginForm = yup.InferType<typeof schema>;
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -51,11 +53,20 @@ export default function LoginPage() {
 
           <div>
             <label className="block mb-1 font-medium">Password</label>
-            <input
-              type="password"
+
+            <div className="relative">
+              <input type={showPassword ? "text" : "password"}
               {...register("password")}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            
+            <button type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-2 text-sm text-gray-600 hover:text-gray-800">
+              {showPassword ? "Hide" : "Show"}
+            </button>
+            </div>
+
             <p className="text-red-600 text-sm">{errors.password?.message}</p>
           </div>
 

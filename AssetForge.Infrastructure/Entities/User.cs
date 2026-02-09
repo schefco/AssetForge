@@ -1,4 +1,6 @@
-﻿namespace AssetForge.Infrastructure.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AssetForge.Infrastructure.Entities
 {
     public class User
     {
@@ -6,6 +8,7 @@
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string NotificationEmail { get; set; } = string.Empty;
         public string Role { get; set; } = "User"; // User, Admin, Technician
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

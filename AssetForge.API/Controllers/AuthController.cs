@@ -9,6 +9,7 @@ using AssetForge.Infrastructure.Services;
 using AssetForge.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using AssetForge.Application.DTOs.Users;
+using AutoMapper;
 
 namespace AssetForge.API.Controllers
 {
@@ -18,11 +19,13 @@ namespace AssetForge.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
-        public AuthController(AppDbContext context, IConfiguration config)
+        public AuthController(AppDbContext context, IConfiguration config, IMapper mapper)
         {
             _context = context;
             _config = config;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -59,6 +62,7 @@ namespace AssetForge.API.Controllers
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
+                NotificationEmail = dto.Email,
                 PasswordHash = hash,
                 PasswordSalt = salt,
                 Role = dto.Role
@@ -67,7 +71,8 @@ namespace AssetForge.API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok("User registered successfully");
+            var userResponse = _mapper.Map<UserResponseDTO>(user);
+            return Ok(userResponse);
         }
 
         [HttpPost("login")]
@@ -114,7 +119,8 @@ namespace AssetForge.API.Controllers
                 LastName = user.LastName,
                 Role = user.Role,
                 Token = tokenString,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                NotificationEmail = user.NotificationEmail,
             };
 
             return Ok(response);
@@ -160,7 +166,8 @@ namespace AssetForge.API.Controllers
                     u.Email,
                     u.Role,
                     u.FirstName,
-                    u.LastName
+                    u.LastName,
+                    u.NotificationEmail,
                 })
                 .FirstOrDefaultAsync();
 
